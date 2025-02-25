@@ -50,7 +50,7 @@ jobs:
           fi
       - name: Get timings to cache
         id: get-timings-to-cache
-        uses: ./.github/actions/cypress/merge_timings
+        uses: ministryofjustice/hmpps-assess-risks-and-needs-github-actions/.github/actions/cypress/merge_timings@arn-2494-shared-workflows-actions
         with:
           container-timings: '${{ steps.merge-container-timings.outputs.timings }}'
           cached-timings: '${{ steps.get-cached-timings.outputs.timings }}'

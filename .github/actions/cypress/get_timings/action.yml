@@ -62,7 +62,7 @@ runs:
         then cat timings.json && echo "timings=$(jq -c . < timings.json)" >> $GITHUB_OUTPUT; \
         else echo "timings=" >> $GITHUB_OUTPUT; \
         fi
-    - uses: ./.github/actions/cypress/create_timings_file
+    - uses: ministryofjustice/hmpps-assess-risks-and-needs-github-actions/.github/actions/cypress/create_timings_file@arn-2494-shared-workflows-actions
       if: ${{ inputs.create == 'true' }}
       with:
         timings: ${{ steps.get-timings.outputs.timings }}
