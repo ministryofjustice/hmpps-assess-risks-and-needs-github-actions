@@ -1,0 +1,15 @@
+name: 'Merge timings'
+description: 'Merges cached timings with container timings'
+inputs:
+  container-timings:
+    description: 'Merged container timings'
+    required: true
+  cached-timings:
+    description: 'Cached timings'
+    required: true
+outputs:
+  timings:
+    description: 'The updated timings to cache'
+runs:
+  using: 'node20'
+  main: 'dist/index.js'
