@@ -2,14 +2,16 @@ name: Get Cypress test timings from cache
 
 inputs:
   spec-file-patterns:
-    type: string
-    required: true
     description: 'List of glob patterns, separated by a single space. For example: e2e/**/*.cy.ts e2e/**/*.cy.js'
+    required: true
   timings-cache-key:
-    type: string
-    required: false
-    default: cypress-timings
     description: 'Cache key to retrieve timings from'
+    required: false
+    default: 'cypress-timings'
+  create:
+    description: 'Whether to create the timings.json file'
+    required: false
+    default: 'true'
 
 outputs:
   timings:
@@ -56,3 +58,7 @@ runs:
         then cat timings.json && echo "timings=$(jq -c . < timings.json)" >> $GITHUB_OUTPUT; \
         else echo "timings=" >> $GITHUB_OUTPUT; \
         fi
+    - uses: ./.github/actions/cypress/create_timings_file
+      if: ${{ inputs.create == 'true' }}
+      with:
+        timings: ${{ steps.get-timings.outputs.timings }}
