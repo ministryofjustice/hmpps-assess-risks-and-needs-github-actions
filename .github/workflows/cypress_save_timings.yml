@@ -47,7 +47,7 @@ jobs:
           cat merged-container-timings.json
           echo "timings=$(jq -c . < merged-container-timings.json)" >> $GITHUB_OUTPUT
       - name: Restore timings cache
-        uses: actions/cache/restore@v4
+        uses: actions/cache/restore@v4.1.2
         with:
           path: timings-cache.json
           key: ${{ inputs.timings-cache-key }}
@@ -76,7 +76,7 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - name: Cache timings
-        uses: actions/cache/save@v4
+        uses: actions/cache/save@v4.1.2
         with:
           path: timings-cache.json
           key: ${{ inputs.timings-cache-key }}

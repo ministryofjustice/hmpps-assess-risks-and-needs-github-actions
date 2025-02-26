@@ -25,7 +25,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - name: Restore timing cache
-        uses: actions/cache/restore@v4
+        uses: actions/cache/restore@v4.1.2
         with:
           path: timings-cache.json
           key: ${{ inputs.timings-cache-key }}
