@@ -25,13 +25,18 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+      - run: |
+          if [[ "${{ inputs.initial-timings }}" == "" ]]; \
+          then echo '{"durations": []}' > timings.json; \
+          else echo '${{ inputs.initial-timings }}' > timings.json; \
+          fi
       - name: Merge container timings
         id: merge-container-timings
         run: |
           echo '${{ inputs.updated-timings }}' \
             | jq 'to_entries | map({key: .key, value: (.value | fromjson)}) | from_entries' \
             | jq -r 'map(.durations) | add | map(.)' \
-            | jq --argjson initial "$(echo '${{ inputs.initial-timings }}' | jq '.durations')" 'map(select(. as $entry | $initial | index($entry) | not))' \
+            | jq --argjson initial "$(cat timings.json | jq '.durations')" 'map(select(. as $entry | $initial | index($entry) | not))' \
             | jq -c '.[]' \
             | while read -r line; \
               do spec=$(echo "$line" | jq -r '.spec'); \
