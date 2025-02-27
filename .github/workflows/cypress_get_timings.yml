@@ -46,6 +46,7 @@ jobs:
       - name: Find spec files
         if: ${{ steps.get-cached-timings.outputs.timings != '' }}
         run: |
+          shopt -s globstar
           find ${{ inputs.spec-file-patterns }} -type f \
             | while read -r spec; do \
               hash=$(md5sum "$spec" | cut -d " " -f1); \
