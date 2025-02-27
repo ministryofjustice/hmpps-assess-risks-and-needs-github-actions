@@ -21,9 +21,10 @@ on:
         type: string
         required: false
         default: ${{ github.repository }}
-
-permissions:
-  actions: write
+    secrets:
+      cache-delete-token:
+        description: 'Personal access token with repo scope. Used for deleting cache keys.'
+        required: true
 
 jobs:
   save-timings:
@@ -77,11 +78,9 @@ jobs:
           cat timings-cache.json
       - name: Delete Previous Cache
         continue-on-error: true
-        run: |
-          gh extension install actions/gh-actions-cache
-          gh actions-cache delete ${{ inputs.timings-cache-key }} --confirm
+        run: gh cache delete ${{ inputs.timings-cache-key }} --repo ${{ github.repository }}
         env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.cache-delete-token }}
       - name: Cache timings
         uses: actions/cache/save@v4
         with:
