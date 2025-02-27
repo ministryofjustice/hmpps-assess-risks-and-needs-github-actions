@@ -16,6 +16,11 @@ on:
         required: false
         default: cypress-timings
         description: 'Cache key to retrieve/store timings from/to'
+      repository:
+        description: 'Repository to pull spec files from'
+        type: string
+        required: false
+        default: ${{ github.repository }}
 
 permissions:
   actions: write
@@ -25,6 +30,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+        with:
+          repository: ${{ inputs.repository }}
       - run: |
           if [[ "${{ inputs.initial-timings }}" == "" ]]; \
           then echo '{"durations": []}' > timings.json; \
@@ -47,7 +54,7 @@ jobs:
           cat merged-container-timings.json
           echo "timings=$(jq -c . < merged-container-timings.json)" >> $GITHUB_OUTPUT
       - name: Restore timings cache
-        uses: actions/cache/restore@v4.1.2
+        uses: actions/cache/restore@v4
         with:
           path: timings-cache.json
           key: ${{ inputs.timings-cache-key }}
@@ -72,11 +79,11 @@ jobs:
         continue-on-error: true
         run: |
           gh extension install actions/gh-actions-cache
-          gh actions-cache delete "${{ inputs.timings-cache-key }}" --confirm
+          gh actions-cache delete ${{ inputs.timings-cache-key }} --confirm
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - name: Cache timings
-        uses: actions/cache/save@v4.1.2
+        uses: actions/cache/save@v4
         with:
           path: timings-cache.json
           key: ${{ inputs.timings-cache-key }}

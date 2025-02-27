@@ -39,6 +39,9 @@ name: Run Cypress tests
 on:
   pull_request:
 
+permissions:
+  actions: write
+
 jobs:
   get-timings:
     uses: ministryofjustice/hmpps-assess-risks-and-needs-github-actions/.github/workflows/cypress_get_timings.yml@v1
