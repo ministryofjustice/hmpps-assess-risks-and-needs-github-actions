@@ -65,6 +65,10 @@ jobs:
         id: get-timings
         run: |
           if ls timings.json; \
-          then cat timings.json && echo "timings=$(jq -c . < timings.json)" >> $GITHUB_OUTPUT; \
+          then \
+            cat timings.json \
+            && jq -e '.durations | length == 0' timings.json \
+            && echo "timings=" >> $GITHUB_OUTPUT \
+            || echo "timings=$(jq -c . < timings.json)" >> $GITHUB_OUTPUT; \
           else echo "timings=" >> $GITHUB_OUTPUT; \
           fi
