@@ -12,6 +12,11 @@ on:
         required: false
         default: cypress-timings
         description: 'Cache key to retrieve timings from'
+      repository:
+        description: 'Repository to pull spec files from'
+        type: string
+        required: false
+        default: ${{ github.repository }}
     outputs:
       timings:
         description: 'Contents of timings.json'
@@ -24,6 +29,8 @@ jobs:
       timings: ${{ steps.get-timings.outputs.timings }}
     steps:
       - uses: actions/checkout@v4
+        with:
+          repository: ${{ inputs.repository }}
       - name: Restore timing cache
         uses: actions/cache/restore@v4.1.2
         with:

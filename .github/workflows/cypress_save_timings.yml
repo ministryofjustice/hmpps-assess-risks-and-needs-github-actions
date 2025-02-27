@@ -16,6 +16,11 @@ on:
         required: false
         default: cypress-timings
         description: 'Cache key to retrieve/store timings from/to'
+      repository:
+        description: 'Repository to pull spec files from'
+        type: string
+        required: false
+        default: ${{ github.repository }}
 
 permissions:
   actions: write
@@ -25,6 +30,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+        with:
+          repository: ${{ inputs.repository }}
       - run: |
           if [[ "${{ inputs.initial-timings }}" == "" ]]; \
           then echo '{"durations": []}' > timings.json; \
