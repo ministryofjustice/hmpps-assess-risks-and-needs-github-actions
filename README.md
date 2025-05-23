@@ -29,18 +29,20 @@ module.exports = defineConfig({
 })
 ```
 
-Configure your GH Actions workflow.
+Create a Personal Access Token with repo scope and permissions for:
 
-Here's a complete workflow example running 4 parallel containers:
+- contents: read
+- actions: read & write
+
+Save the token as `CACHE_DELETE_TOKEN` in Settings -> Secrets -> Actions -> Repository Secrets.
+
+Configure your GH Actions workflow. Here's a complete workflow example running 4 parallel containers:
 
 ```yaml
 name: Run Cypress tests
 
 on:
   pull_request:
-
-permissions:
-  actions: write
 
 jobs:
   get-timings:
@@ -88,4 +90,6 @@ jobs:
     with:
       initial-timings: ${{ needs.get-timings.outputs.timings }}
       updated-timings: ${{ toJSON(needs.e2e-test.outputs) }}
+    secrets:
+      cache-delete-token: ${{ secrets.CACHE_DELETE_TOKEN }}
 ```
