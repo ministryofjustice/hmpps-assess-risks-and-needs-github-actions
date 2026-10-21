@@ -35,6 +35,8 @@ jobs:
       tag_latest: false
       push: true
       docker_multiplatform: false
+      # Lets the Docker build's npm install read internal packages from GitHub Packages.
+      additional_docker_secrets_args: 'node_auth_token=GITHUB_TOKEN'
 
   deploy_env:
     if: ${{ inputs.image_tag == '' }}
